@@ -1,5 +1,8 @@
 # W3C Trace Context Demo
 
+> [!WARNING]
+> This repository is demo code, not production code. It intentionally omits production concerns such as full W3C Trace Context support, robust input validation, complete error handling, sampling policy, security review, and deployment hardening.
+
 Cloudflare Workers demo showing two levels of W3C `traceparent` handling:
 
 - `src/index.ts` — the default, documented implementation with structured logging, timeout handling, and a JSON response that proves downstream propagation.
@@ -84,7 +87,7 @@ BASE_URL=https://w3c-trace-context-demo.example.workers.dev npm run smoke
 
 - Not a custom tracing backend — `src/index.ts` writes structured JSON logs with `console.log`, and `wrangler.jsonc` enables Cloudflare Workers Logs/Traces when deployed. Export or route telemetry to your preferred sink as needed.
 - Not an application sampler — the full implementation emits one canonical event per request, while `src/index.minimal.ts` emits no logs. New traces use W3C flags `01` by default; continued traces preserve inbound flags.
-- Not a complete W3C Trace Context implementation — this demo focuses on `traceparent` only and does not propagate `tracestate`.
+- Not a complete W3C Trace Context implementation — this demo focuses on `traceparent` only. It does not propagate `tracestate`, parse future `traceparent` versions, normalize reserved trace-flags bits, enforce `tracestate` limits, or define a production trust-boundary policy.
 - Not validated input parsing — there's no request body to parse. A real service should use zod/valibot at the boundary.
 
 ## Key files
