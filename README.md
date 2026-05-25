@@ -71,6 +71,10 @@ npm run smoke
 BASE_URL=https://w3c-trace-context-demo.example.workers.dev npm run smoke
 ```
 
+The default implementation gives the live `httpbin.org` upstream up to 5 seconds to respond. The smoke script fails if the upstream does not echo the propagated `traceparent`.
+
+The smoke script requires `jq` to parse the Worker JSON response.
+
 ## Configuration
 
 `wrangler.jsonc` vars:

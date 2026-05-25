@@ -28,7 +28,7 @@ const TRACEPARENT_RE = /^00-([0-9a-f]{32})-([0-9a-f]{16})-([0-9a-f]{2})$/;
 
 // Bound the outbound demo request so a slow dependency does not keep the
 // Worker invocation and client response open indefinitely.
-const UPSTREAM_TIMEOUT_MS = 2_000;
+const UPSTREAM_TIMEOUT_MS = 5_000;
 
 // `Env` describes the environment variables configured in wrangler.jsonc.
 // In production Cloudflare supplies these values; in tests the Workers Vitest

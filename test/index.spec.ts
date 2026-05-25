@@ -54,7 +54,7 @@ function mockUpstreamOnce(): { capturedTraceparent: () => string | undefined } {
 }
 
 // ---------------------------------------------------------------------------
-// Tests — mirror the three cases in smoke.sh
+// Tests — core trace-context behavior plus spec-invalid edge cases.
 // ---------------------------------------------------------------------------
 
 describe('w3c trace context worker', () => {
@@ -117,5 +117,24 @@ describe('w3c trace context worker', () => {
 		expect(tp).not.toContain(INBOUND_TRACE_ID);
 
 		expect(upstream.capturedTraceparent()).toBe(tp);
+	});
+
+	it('ignores all-zero trace ids and parent ids as invalid', async () => {
+		const invalidTraceparents = ['00-00000000000000000000000000000000-b7ad6b7169203331-01', `00-${INBOUND_TRACE_ID}-0000000000000000-01`];
+
+		for (const invalidTraceparent of invalidTraceparents) {
+			const upstream = mockUpstreamOnce();
+
+			const response = await SELF.fetch('https://example.com/', {
+				headers: { traceparent: invalidTraceparent },
+			});
+			const tp = response.headers.get('traceparent') ?? '';
+
+			expect(response.status).toBe(200);
+			expect(tp).toMatch(TRACEPARENT_RE);
+			expect(tp).not.toBe(invalidTraceparent);
+			expect(tp).not.toContain(INBOUND_TRACE_ID);
+			expect(upstream.capturedTraceparent()).toBe(tp);
+		}
 	});
 });
