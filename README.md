@@ -25,7 +25,13 @@ To poke at it interactively:
 npm run dev       # http://localhost:8787
 ```
 
-You'll see a JSON canonical event in the dev console for each request, and the response will include a `traceparent` header. For an inbound trace, the response traceparent shares the same `trace_id` (chars 4–35) as the one you sent.
+Each request produces:
+
+- A `traceparent` **response header** (the wire contract for the next hop).
+- A JSON body including `trace_id` and `upstream_saw.traceparent` — the `traceparent` the upstream (`httpbin.org/headers`) reports having received. These should match the response header, proving end-to-end propagation in a single curl.
+- A structured canonical event in the dev console (and in [Workers Logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/) when deployed).
+
+For an inbound trace, the response `traceparent` shares the same `trace_id` (chars 4–35) as the one you sent.
 
 ### Smoke-testing a deployed Worker
 
@@ -46,9 +52,10 @@ BASE_URL=https://w3c-trace-context-demo.example.workers.dev npm run smoke
 | Var                          | Purpose                                                  |
 | ---------------------------- | -------------------------------------------------------- |
 | `SERVICE_NAME`               | Tagged on every log line.                                |
+| `SERVICE_VERSION`            | Tagged on every log line. Bump on each deploy.           |
 | `ENVIRONMENT`                | Tagged on every log line.                                |
 | `TRUST_INCOMING_TRACEPARENT` | `"true"` to continue inbound traces; else always start a new one. |
-| `UPSTREAM_URL`               | The downstream service we propagate `traceparent` to.    |
+| `UPSTREAM_URL`               | The downstream service we propagate `traceparent` to. Default is `httpbin.org/headers` so the response echoes what we sent. |
 
 ## What this is *not*
 

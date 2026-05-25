@@ -22,9 +22,10 @@
 	],
 	"vars": {
     "SERVICE_NAME": "w3c-trace-context-demo",
+    "SERVICE_VERSION": "0.0.0",
     "ENVIRONMENT": "dev",
     "TRUST_INCOMING_TRACEPARENT": "true",
-    "UPSTREAM_URL": "https://httpbin.org/anything"
+    "UPSTREAM_URL": "https://httpbin.org/headers"
   }
 	/**
 	 * Smart Placement
