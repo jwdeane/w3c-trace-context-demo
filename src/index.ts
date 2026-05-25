@@ -1,5 +1,5 @@
 /**
- * W3C Trace Context PoC for Cloudflare Workers.
+ * W3C Trace Context Demo for Cloudflare Workers.
  *
  * Cloudflare Workers run TypeScript/JavaScript on Cloudflare's edge network.
  * The runtime exposes standard Web APIs such as Request, Response, Headers,
@@ -119,7 +119,7 @@ function randomHex(bytes: number): string {
 
 // Parse a traceparent header into its pieces. Returning null means "do not
 // continue this trace; start a new one instead." The parser is intentionally
-// strict for the PoC: it accepts only W3C version 00 and lowercase hex.
+// strict for the demo: it accepts only W3C version 00 and lowercase hex.
 function parseTraceparent(value: string | null): ParsedTraceparent | null {
   // No header means the caller did not provide trace context.
   if (!value) return null;
@@ -294,7 +294,7 @@ interface UpstreamResult {
   duration_ms: number;
   ok: boolean;
   // The `traceparent` value the upstream service reports having received.
-  // Echoed back to the client so the PoC's propagation guarantee is visible
+  // Echoed back to the client so the demo's propagation guarantee is visible
   // in a single curl.
   saw_traceparent: string | null;
 }
