@@ -1,5 +1,5 @@
 {
-	"name": "clean",
+	"name": "w3c-trace-context-demo",
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
@@ -7,7 +7,8 @@
 		"dev": "wrangler dev",
 		"start": "wrangler dev",
 		"test": "vitest",
-		"cf-typegen": "wrangler types"
+		"cf-typegen": "wrangler types",
+		"smoke": "./smoke.sh"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.12.4",

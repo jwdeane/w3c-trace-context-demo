@@ -4,16 +4,28 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "clean",
+	"name": "w3c-trace-context-demo",
 	"main": "src/index.ts",
 	"compatibility_date": "2026-03-10",
-	"observability": {
-		"enabled": true
-	},
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": true
+    }
+  },
 	"upload_source_maps": true,
 	"compatibility_flags": [
 		"nodejs_compat"
-	]
+	],
+	"vars": {
+    "SERVICE_NAME": "w3c-trace-context-demo",
+    "ENVIRONMENT": "dev",
+    "TRUST_INCOMING_TRACEPARENT": "true",
+    "UPSTREAM_URL": "https://httpbin.org/anything"
+  }
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
