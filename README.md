@@ -75,15 +75,15 @@ BASE_URL=https://w3c-trace-context-demo.example.workers.dev npm run smoke
 
 `wrangler.jsonc` vars:
 
-| Var                          | Purpose                                                  |
-| ---------------------------- | -------------------------------------------------------- |
-| `SERVICE_NAME`               | Used by `src/index.ts`; tagged on every canonical event.  |
-| `SERVICE_VERSION`            | Used by `src/index.ts`; tagged on every canonical event. Bump on each deploy. |
-| `ENVIRONMENT`                | Used by `src/index.ts`; tagged on every canonical event.  |
+| Var                          | Purpose                                                                                                                                                          |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SERVICE_NAME`               | Used by `src/index.ts`; tagged on every canonical event.                                                                                                         |
+| `SERVICE_VERSION`            | Used by `src/index.ts`; tagged on every canonical event. Bump on each deploy.                                                                                    |
+| `ENVIRONMENT`                | Used by `src/index.ts`; tagged on every canonical event.                                                                                                         |
 | `TRUST_INCOMING_TRACEPARENT` | Used by `src/index.ts`; `"true"` to continue inbound traces, otherwise always start a new one. `src/index.minimal.ts` continues any valid inbound `traceparent`. |
-| `UPSTREAM_URL`               | Used by both implementations; the downstream service we propagate `traceparent` to. Default is `httpbin.org/headers` so the response echoes what we sent. |
+| `UPSTREAM_URL`               | Used by both implementations; the downstream service we propagate `traceparent` to. Default is `httpbin.org/headers` so the response echoes what we sent.        |
 
-## What this is *not*
+## What this is _not_
 
 - Not a custom tracing backend — `src/index.ts` writes structured JSON logs with `console.log`, and `wrangler.jsonc` enables Cloudflare Workers Logs/Traces when deployed. Export or route telemetry to your preferred sink as needed.
 - Not an application sampler — the full implementation emits one canonical event per request, while `src/index.minimal.ts` emits no logs. New traces use W3C flags `01` by default; continued traces preserve inbound flags.

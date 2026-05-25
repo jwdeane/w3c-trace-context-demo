@@ -1,11 +1,11 @@
-import { SELF, fetchMock } from "cloudflare:test";
-import { afterEach, beforeAll, describe, expect, it } from "vitest";
+import { SELF, fetchMock } from 'cloudflare:test';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 // ---------------------------------------------------------------------------
 // Fixtures
 // ---------------------------------------------------------------------------
 
-const INBOUND_TRACE_ID = "0af7651916cd43dd8448eb211c80319c";
+const INBOUND_TRACE_ID = '0af7651916cd43dd8448eb211c80319c';
 const INBOUND_TRACEPARENT = `00-${INBOUND_TRACE_ID}-b7ad6b7169203331-01`;
 const TRACEPARENT_RE = /^00-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$/;
 
@@ -35,18 +35,18 @@ afterEach(() => {
 function mockUpstreamOnce(): { capturedTraceparent: () => string | undefined } {
 	let captured: string | undefined;
 	fetchMock
-		.get("https://httpbin.org")
-		.intercept({ method: "GET", path: "/headers" })
+		.get('https://httpbin.org')
+		.intercept({ method: 'GET', path: '/headers' })
 		.reply(200, (opts) => {
 			const headers = (opts.headers as Record<string, string> | undefined) ?? {};
-			captured = headers["traceparent"] ?? headers["Traceparent"];
+			captured = headers['traceparent'] ?? headers['Traceparent'];
 			// Mimic httpbin's `/headers` response shape. Note the title-cased
 			// "Traceparent" key — httpbin normalizes header casing, and the
 			// worker must handle that.
 			return {
 				headers: {
-					Host: "httpbin.org",
-					Traceparent: captured ?? "",
+					Host: 'httpbin.org',
+					Traceparent: captured ?? '',
 				},
 			};
 		});
@@ -57,12 +57,12 @@ function mockUpstreamOnce(): { capturedTraceparent: () => string | undefined } {
 // Tests — mirror the three cases in smoke.sh
 // ---------------------------------------------------------------------------
 
-describe("w3c trace context worker", () => {
-	it("mints a fresh trace when no inbound traceparent is present", async () => {
+describe('w3c trace context worker', () => {
+	it('mints a fresh trace when no inbound traceparent is present', async () => {
 		const upstream = mockUpstreamOnce();
 
-		const response = await SELF.fetch("https://example.com/");
-		const tp = response.headers.get("traceparent") ?? "";
+		const response = await SELF.fetch('https://example.com/');
+		const tp = response.headers.get('traceparent') ?? '';
 
 		expect(response.status).toBe(200);
 		expect(tp).toMatch(TRACEPARENT_RE);
@@ -75,19 +75,19 @@ describe("w3c trace context worker", () => {
 			trace_id: string;
 			upstream_saw: { traceparent: string | null };
 		};
-		expect(body.trace_id).toBe(tp.split("-")[1]);
+		expect(body.trace_id).toBe(tp.split('-')[1]);
 		// End-to-end: the worker should report back the same traceparent the
 		// upstream saw, even though httpbin returned it title-cased.
 		expect(body.upstream_saw.traceparent).toBe(tp);
 	});
 
-	it("continues an inbound trace (same trace_id, new span id)", async () => {
+	it('continues an inbound trace (same trace_id, new span id)', async () => {
 		const upstream = mockUpstreamOnce();
 
-		const response = await SELF.fetch("https://example.com/", {
+		const response = await SELF.fetch('https://example.com/', {
 			headers: { traceparent: INBOUND_TRACEPARENT },
 		});
-		const tp = response.headers.get("traceparent") ?? "";
+		const tp = response.headers.get('traceparent') ?? '';
 
 		expect(response.status).toBe(200);
 		expect(tp.startsWith(`00-${INBOUND_TRACE_ID}-`)).toBe(true);
@@ -104,13 +104,13 @@ describe("w3c trace context worker", () => {
 		expect(body.upstream_saw.traceparent).toBe(tp);
 	});
 
-	it("ignores a malformed inbound traceparent and mints a fresh trace", async () => {
+	it('ignores a malformed inbound traceparent and mints a fresh trace', async () => {
 		const upstream = mockUpstreamOnce();
 
-		const response = await SELF.fetch("https://example.com/", {
-			headers: { traceparent: "not-a-real-traceparent" },
+		const response = await SELF.fetch('https://example.com/', {
+			headers: { traceparent: 'not-a-real-traceparent' },
 		});
-		const tp = response.headers.get("traceparent") ?? "";
+		const tp = response.headers.get('traceparent') ?? '';
 
 		expect(response.status).toBe(200);
 		expect(tp).toMatch(TRACEPARENT_RE);
