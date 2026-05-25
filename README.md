@@ -94,6 +94,10 @@ The smoke script requires `jq` to parse the Worker JSON response.
 - Not a complete W3C Trace Context implementation — this demo focuses on `traceparent` only. It does not propagate `tracestate`, parse future `traceparent` versions, normalize reserved trace-flags bits, enforce `tracestate` limits, or define a production trust-boundary policy.
 - Not validated input parsing — there's no request body to parse. A real service should use zod/valibot at the boundary.
 
+## Platform roadmap
+
+This demo implements W3C Trace Context **manually** because the Worker runtime does not yet expose it natively. Cloudflare has announced that [external trace context propagation using W3C Trace Context standards](https://developers.cloudflare.com/changelog/post/2026-05-07-automatic-tracing-across-do-and-worker-subrequests/) is on the platform roadmap.
+
 ## Key files
 
 - `src/index.ts` — full/default implementation.
