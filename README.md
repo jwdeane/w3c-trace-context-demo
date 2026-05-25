@@ -25,6 +25,24 @@ To poke at it interactively:
 npm run dev       # http://localhost:8787
 ```
 
+To run the true MVP implementation instead, use the alternate entrypoint on a different port:
+
+```sh
+npx wrangler dev src/index.minimal.ts --port 8788
+```
+
+Then test it from another terminal:
+
+```sh
+curl -i http://localhost:8788/
+
+curl -i \
+  -H 'traceparent: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01' \
+  http://localhost:8788/
+```
+
+The minimal response should include a `traceparent` header. For the second request, that response header should keep trace ID `0af7651916cd43dd8448eb211c80319c` and use a new parent/span ID.
+
 Each request produces:
 
 - A `traceparent` **response header** (the wire contract for the next hop).
@@ -66,4 +84,5 @@ BASE_URL=https://w3c-trace-context-demo.example.workers.dev npm run smoke
 ## Key files
 
 - `src/index.ts` — everything.
+- `src/index.minimal.ts` — true MVP: add and propagate `traceparent` only.
 - `wrangler.jsonc` — Worker config + demo vars.
