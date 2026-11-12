@@ -11,13 +11,13 @@ For all limits and quotas, retrieve from the product's `/platform/limits/` page.
 
 ## Commands
 
-| Command               | Purpose                   |
-| --------------------- | ------------------------- |
-| `npx wrangler dev`    | Local development         |
-| `npx wrangler deploy` | Deploy to Cloudflare      |
-| `npx wrangler types`  | Generate TypeScript types |
+| Command                  | Purpose                   |
+| ------------------------ | ------------------------- |
+| `npx cf dev`            | Local development         |
+| `npx cf deploy`         | Deploy to Cloudflare      |
+| `npx cf workers types`  | Generate TypeScript types |
 
-Run `wrangler types` after changing bindings in wrangler.jsonc.
+Run `cf workers types` after changing bindings in cloudflare.config.ts.
 
 ## Node.js Compatibility
 
